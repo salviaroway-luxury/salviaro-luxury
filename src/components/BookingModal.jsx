@@ -80,7 +80,7 @@ const BookingModal = ({ show, onHide, vehicle }) => {
 
   if (!vehicle) return null;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!startDate) {
       alert(t('selectStartDate'));
       return;
@@ -124,6 +124,31 @@ const BookingModal = ({ show, onHide, vehicle }) => {
     message += t('weWillContact');
 
     alert(message);
+    
+    // إرسال الحجز إلى السيرفر
+    try {
+      const response = await fetch('http://localhost:5000/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          vehicleName: vehicle.name,
+          vehicleType: vehicle.type,
+          fromAirport: !isCar && fromAirport ? getAirportName(selectedFromAirport) : '',
+          toAirport: !isCar && toAirport ? getAirportName(selectedToAirport) : '',
+          startDate: startDate,
+          startTime: startTime,
+          endDate: endDate,
+          endTime: endTime,
+          totalPrice: totalPrice,
+          userName: 'عميل',
+          userEmail: 'client@email.com'
+        })
+      });
+      const data = await response.json();
+      console.log('✅ تم حفظ الحجز في قاعدة البيانات:', data);
+    } catch (error) {
+      console.log('❌ خطأ في حفظ الحجز:', error);
+    }
     
     setStartDate('');
     setStartTime('');
