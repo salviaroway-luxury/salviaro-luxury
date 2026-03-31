@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { CategoryProvider } from './contexts/CategoryContext';
+import { CurrencyProvider } from './contexts/CurrencyContext';
+import { AuthProvider } from './contexts/AuthContext';
+import Home from './pages/Home';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 
 function App() {
+  useEffect(() => {
+    document.body.style.backgroundColor = '#000000';
+    document.body.style.color = '#ffffff';
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <LanguageProvider>
+        <CategoryProvider>
+          <CurrencyProvider>
+            <Home />
+          </CurrencyProvider>
+        </CategoryProvider>
+      </LanguageProvider>
+    </AuthProvider>
   );
 }
 
